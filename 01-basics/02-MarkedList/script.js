@@ -49,8 +49,7 @@ const app = new Vue({
       }));
     },
   },
-  methods: {
-  }
+
 })
 
 app.$mount('#app');

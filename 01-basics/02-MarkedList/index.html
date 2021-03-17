@@ -14,6 +14,7 @@
 
 <body>
   <div id="app">
+
     <input type="text" v-model="input" />
     <ul>
       <li v-for="i in  emails" :class="{ marked: i.isMarked }">{{i.email}}</li>
