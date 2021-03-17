@@ -1,6 +1,6 @@
 import Vue from './vendor/vue.esm.browser.js';
 
-new Vue({
+const app = new Vue({
    el: '#app',
    data() {
       return {
