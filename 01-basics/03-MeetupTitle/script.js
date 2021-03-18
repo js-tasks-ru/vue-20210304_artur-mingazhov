@@ -6,23 +6,20 @@ const app = new Vue({
    data() {
       return {
          picked: null,
-         arr: null
+         title: ""
       }
    },
-   async mounted() {
-
-      let us = await fetch(
-         `https://course-vue.javascript.ru/api/meetups/`
-      );
-      this.arr = await us.json();
+   methods: {
+      async f(i) {
+         let us = await fetch(
+            `https://course-vue.javascript.ru/api/meetups/${i}`
+         );
+         let res = await us.json();
+         this.title = res.title
+      },
    },
 
-   computed: {
-      title() {
-         if (this.picked === null) return "";
-         return this.arr[this.picked].title
-      }
-   }
+
 })
 
 app.$mount('#app');

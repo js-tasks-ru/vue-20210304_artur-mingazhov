@@ -7,14 +7,13 @@
 
   <div id="app">
 
-    <template v-for="(i,indx) in 5">
-      <input type="radio" :id="indx" :value="indx" v-model="picked">
-      <label :for="indx">{{i}}</label>
+    <template v-for="(i, indx) in 5">
+      <input type="radio" :id="one" :value="i" v-model="picked" @click="f(i)">
+      <label :for="i">{{i}}</label>
     </template>
-
     <br>
-    <span> {{ title }}</span>
 
+    <span> {{ title }}</span>
   </div>
 
   <script type="module" src="script.js"></script>
