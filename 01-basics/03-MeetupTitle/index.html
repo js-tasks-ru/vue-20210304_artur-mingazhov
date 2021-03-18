@@ -1,13 +1,22 @@
-<!doctype html>
-<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <title>MeetupTitle</title>
 </head>
+
 <body>
 
-<!-- Решение -->
+  <div id="app">
 
-<script type="module" src="script.js"></script>
+    <template v-for="i in 5">
+      <input type="radio" :id="i" :value="i" v-model="picked">
+      <label :for="i">{{i}}</label>
+    </template>
+
+    <br>
+    <span> {{ title }}</span>
+  </div>
+
+  <script type="module" src="script.js"></script>
 </body>
+
 </html>

@@ -1,7 +1,7 @@
-// import Vue from './vendor/vue.esm.browser.js';
+import Vue from './vendor/vue.esm.browser.js';
 
-// From https://jsonplaceholder.typicode.com/comments
-/*
+//From https://jsonplaceholder.typicode.com/comments
+
 const emails = [
   'Eliseo@gardner.biz',
   'Jayne_Kuhic@sydney.com',
@@ -29,6 +29,27 @@ const emails = [
   'Jeffery@juwan.us',
   'Isaias_Kuhic@jarrett.net',
 ];
-*/
 
-// new Vue();
+const app = new Vue({
+  templete: '#app',
+  data() {
+    return {
+      input: "",
+      rawEmails: emails,
+    }
+  },
+  computed: {
+    normalizeInput() {
+      return this.input.trim().toLowerCase();
+    },
+    emails() {
+      return this.rawEmails.map((em) => ({
+        email: em,
+        isMarked: this.normalizeInput == "" ? false : em.toLowerCase().includes(this.normalizeInput),
+      }));
+    },
+  },
+
+})
+
+app.$mount('#app');
