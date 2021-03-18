@@ -1,3 +1,4 @@
+
 import Vue from './vendor/vue.esm.browser.js';
 
 const app = new Vue({
@@ -5,43 +6,30 @@ const app = new Vue({
    data() {
       return {
          picked: "",
-         arr: [],
+         arr: null,
+         filterArr: null,
       }
+   },
+   async mounted() {
+      let us = await fetch(
+         `https://course-vue.javascript.ru/api/meetups/`
+      );
+      this.arr = await us.json();
 
    },
-   async created() {
-
-      for (let i = 1; i < 6; i++) {
-         let us = await fetch(
-            `https://course-vue.javascript.ru/api/meetups/${i}`
-         );
-         let l = await us.json();
-         const t = {
-            id: l.id,
-            title: l.title,
-         }
-         this.arr.push(t)
-
+   watch: {
+      arr() {
+         this.filterArr = this.arr.filter((i, indx) => indx < 5 ? ({
+            id: i.id,
+            title: i.title
+         }) : false)
       }
-      /*
-          let us = await fetch(
-             `https://course-vue.javascript.ru/api/meetups/1`
-          );
-          this.arr = await us.json();
-    
-    */
    },
+
    methods: {
-      f() {
-         alert(this.arr.title)
-      },
    },
    computed: {
-      async a() {
-
-      }
    }
-
 })
 
 app.$mount('#app');

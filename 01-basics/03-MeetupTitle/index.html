@@ -10,10 +10,9 @@
 
   <div id="app">
 
-    <template v-for="(i, indx) in arr">
-
-      <input type="radio" id="01" :value="i.title" v-model="picked">
-      <label for="01">{{indx+1}}</label>
+    <template v-for="i in filterArr">
+      <input type="radio" :id="i.id" :value="i.title" v-model="picked">
+      <label :for="i.id">{{i.id}}</label>
     </template>
 
     <h2>{{ picked }}</h2>
