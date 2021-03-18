@@ -1,6 +1,3 @@
-<!doctype html>
-<html lang="ru">
-
 <head>
   <meta charset="UTF-8">
   <title>MeetupTitle</title>
@@ -10,12 +7,14 @@
 
   <div id="app">
 
-    <template v-for="i in filterArr">
-      <input type="radio" :id="i.id" :value="i.title" v-model="picked">
-      <label :for="i.id">{{i.id}}</label>
+    <template v-for="(i,indx) in 5">
+      <input type="radio" :id="indx" :value="indx" v-model="picked">
+      <label :for="indx">{{i}}</label>
     </template>
 
-    <h2>{{ picked }}</h2>
+    <br>
+    <span> {{ title }}</span>
+
   </div>
 
   <script type="module" src="script.js"></script>
