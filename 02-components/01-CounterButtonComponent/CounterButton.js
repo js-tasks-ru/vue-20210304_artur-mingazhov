@@ -8,12 +8,8 @@ export default {
   },
   data() {
     return {
-      defaultCount: 0,
     };
   },
 
-  computed: {
-
-  },
   template: '<button type="button" @click="$emit(`increment`, count+1)">{{count}}</button>',
 };
