@@ -1,6 +1,6 @@
 <template>
   <div class="toasts">
-    <div class="toast" :class="toast.class" v-for="(toast, index) in toasts" :key="index">
+    <div v-for="(toast, index) in toasts" :key="index" class="toast" :class="toast.class">
       <app-icon :icon="toast.icon" />
       <span>{{ toast.message }}</span>
     </div>
@@ -21,6 +21,7 @@ export default {
       toasts: [],
     };
   },
+
   methods: {
     error(message) {
       this.toasts.push({
@@ -32,6 +33,7 @@ export default {
         this.toasts.shift();
       }, DELAY);
     },
+
     success(message) {
       this.toasts.push({
         class: 'toast_success',
