@@ -67,7 +67,7 @@ export default {
 
   methods: {
     submitForm() {
-      if (this._isFormValidated()) {
+      if (this.isFormValidated()) {
         register(this.user.email, this.user.fullName, this.user.password).then((res) => {
           if (res.id !== undefined) {
             alert(res.id);
@@ -79,7 +79,7 @@ export default {
       }
     },
 
-    _isFormValidated() {
+    isFormValidated() {
       let err = null;
 
       if (this.user.email === '') err = 'email';
