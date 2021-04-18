@@ -8,7 +8,7 @@
     >
       <span>{{ title }}</span>
 
-      <input type="file" :value="value" accept="image/*" class="form-control-file" @change="uploadImage($event)" />
+      <input ref="input" type="file" accept="image/*" class="form-control-file" @change="uploadImage($event)" />
     </label>
   </div>
 </template>
@@ -37,7 +37,6 @@ export default {
   data() {
     return {
       isLoading: false,
-      value: null,
     };
   },
 
@@ -58,7 +57,7 @@ export default {
       if (this.imageId) {
         e.preventDefault();
         this.$emit('change', null);
-        this.value = null;
+        this.$refs.input.value = null;
       }
     },
 
