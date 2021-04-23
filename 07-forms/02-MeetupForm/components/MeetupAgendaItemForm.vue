@@ -6,46 +6,49 @@
 
     <div class="form__row">
       <div class="form__col">
-        <div class="form-group">
-          <label class="form-label">Начало</label>
-          <input
-            class="form-control"
+        <form-group label="Начало">
+          <app-input
             type="time"
             placeholder="00:00"
             :value="agendaItem.startsAt"
             @change="
               $emit('update:agendaItem', {
                 ...agendaItem,
-                startsAt: $event.target.value,
+                startsAt: $event,
               })
             "
           />
-        </div>
+        </form-group>
       </div>
       <div class="form__col">
-        <div class="form-group">
-          <label class="form-label">Окончание</label>
-          <input
-            class="form-control"
+        <form-group label="Окончание">
+          <app-input
             type="time"
             placeholder="00:00"
             :value="agendaItem.endsAt"
             @change="
               $emit('update:agendaItem', {
                 ...agendaItem,
-                endsAt: $event.target.value,
+                endsAt: $event,
               })
             "
           />
-        </div>
+        </form-group>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import AppInput from './AppInput.vue';
+import FormGroup from './FormGroup.vue';
 export default {
   name: 'MeetupAgendaItemForm',
+  components: {
+    AppInput,
+    FormGroup,
+  },
+
   props: {
     agendaItem: {
       type: Object,
