@@ -3,28 +3,28 @@
     <div class="meetup-form__content">
       <fieldset class="form-section">
         <form-group label="Название">
-          <app-input v-model="meetup_.title" />
+          <app-input v-model="localMeetup.title" />
         </form-group>
         <form-group label="Дата">
-          <app-input v-model="meetup_.date" type="date" />
+          <date-input v-model="localMeetup.date" />
         </form-group>
         <form-group label="Место">
-          <app-input v-model="meetup_.place" />
+          <app-input v-model="localMeetup.place" />
         </form-group>
         <form-group label="Описание">
-          <app-input v-model="meetup_.description" multiline rows="3" />
+          <app-input v-model="localMeetup.description" multiline rows="3" />
         </form-group>
 
         <form-group label="Изображение">
           <div class="input-group">
-            <image-uploader v-model="meetup_.imageId" />
+            <image-uploader v-model="localMeetup.imageId" />
           </div>
         </form-group>
       </fieldset>
 
       <h3 class="form__section-title">Программа</h3>
       <meetup-agenda-item-form
-        v-for="(agendaItem, index) in meetup_.agenda"
+        v-for="(agendaItem, index) in localMeetup.agenda"
         :key="agendaItem.id"
         class="mb-3"
         :agenda-item="agendaItem"
@@ -54,14 +54,10 @@ import MeetupAgendaItemForm from './MeetupAgendaItemForm.vue';
 import FormGroup from './FormGroup.vue';
 import AppInput from './AppInput.vue';
 import ImageUploader from './ImageUploader';
-function deepClone(object) {
-  return JSON.parse(JSON.stringify(object));
-}
-/*
-export function deepEqual(a, b) {
-  return JSON.stringify(a) === JSON.stringify(b);
-}
-*/
+import DateInput from './DateInput';
+
+let _ = require('lodash');
+
 let lastId = -1;
 
 function createAgendaItem() {
@@ -84,6 +80,7 @@ export default {
     MeetupAgendaItemForm,
     FormGroup,
     AppInput,
+    DateInput,
   },
 
   props: {
@@ -99,7 +96,7 @@ export default {
 
   data() {
     return {
-      meetup_: deepClone(this.meetup),
+      localMeetup: _.cloneDeep(this.meetup),
     };
   },
 
@@ -107,26 +104,25 @@ export default {
     addAgendaItem() {
       let newItem;
 
-      if (this.meetup_.agenda.length > 0) {
+      if (this.localMeetup.agenda.length > 0) {
         newItem = {
           ...createAgendaItem(),
-          startsAt: this.meetup_.agenda[this.meetup_.agenda.length - 1].endsAt,
-          //endsAt: '00:00',
+          startsAt: this.localMeetup.agenda[this.localMeetup.agenda.length - 1].endsAt,
         };
       } else newItem = createAgendaItem();
-      this.meetup_.agenda.push(newItem);
+      this.localMeetup.agenda.push(newItem);
     },
 
     handleSubmit() {
-      this.$emit('submit', deepClone(this.meetup_));
+      this.$emit('submit', _.cloneDeep(this.localMeetup));
     },
 
     removeAgendaItem(index) {
-      this.meetup_.agenda.splice(index, 1);
+      this.localMeetup.agenda.splice(index, 1);
     },
 
     updateAgendaItem(idx, newItem) {
-      this.meetup_.agenda.splice(idx, 1, newItem);
+      this.localMeetup.agenda.splice(idx, 1, newItem);
     },
   },
 };

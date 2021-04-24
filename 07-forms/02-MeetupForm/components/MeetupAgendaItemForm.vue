@@ -7,7 +7,7 @@
     <div class="form__row">
       <div class="form__col">
         <form-group label="Начало">
-          <app-input
+          <date-input
             type="time"
             placeholder="00:00"
             :value="agendaItem.startsAt"
@@ -22,7 +22,7 @@
       </div>
       <div class="form__col">
         <form-group label="Окончание">
-          <app-input
+          <date-input
             type="time"
             placeholder="00:00"
             :value="agendaItem.endsAt"
@@ -40,13 +40,13 @@
 </template>
 
 <script>
-import AppInput from './AppInput.vue';
 import FormGroup from './FormGroup.vue';
+import DateInput from './DateInput';
 export default {
   name: 'MeetupAgendaItemForm',
   components: {
-    AppInput,
     FormGroup,
+    DateInput,
   },
 
   props: {

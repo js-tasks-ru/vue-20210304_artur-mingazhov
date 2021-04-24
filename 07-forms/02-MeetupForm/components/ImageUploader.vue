@@ -24,11 +24,12 @@ export default {
   name: 'ImageUploader',
 
   model: {
-    prop: 'value',
+    prop: 'value', //imageId
     event: 'change',
   },
 
   props: {
+    //imageId
     value: {
       default: null,
     },
