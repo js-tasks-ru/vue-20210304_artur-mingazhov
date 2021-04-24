@@ -1,5 +1,5 @@
 <template>
-  <app-input :type="type" v-model="valueTr">
+  <app-input v-model="valueTr" :type="type" v-bind="$attrs">
     <template v-for="slotName of Object.keys($slots)" #[slotName]>
       <slot :name="slotName" />
     </template>
@@ -12,8 +12,8 @@ import AppInput from './AppInput';
 var moment = require('moment');
 export default {
   name: 'DateInput',
-  inheritAttrs: false,
   components: { AppInput },
+  inheritAttrs: false,
   model: {
     prop: 'value',
     event: 'change',
@@ -58,49 +58,16 @@ export default {
       },
     },
   },
+
   methods: {
-    handler(e) {
-      if (this.valid(e, this.type)) {
-        let date = new Date(e);
-
-        if (this.type === 'date') {
-          if (typeof this.value === 'number') {
-            this.$emit('change', +date);
-          } else if (typeof this.value === 'object') {
-            this.$emit('change', date);
-          } else this.$emit('change', e);
-        }
-        if (this.type === 'time') {
-          let h = e.split(':')[0];
-          let m = e.split(':')[1];
-
-          date = this.value;
-
-          date = new Date(date);
-          let str = date.getTimezoneOffset() / 60;
-          date = new Date(date.setHours(h - str, m));
-          console.log(date);
-          if (typeof this.value === 'number') {
-            this.$emit('change', +date);
-          } else if (typeof this.value === 'object') {
-            this.$emit('change', date);
-          } else this.$emit('change', e);
-        }
-        if (this.type === 'datetime-local') {
-          let str = date.getHours() - date.getTimezoneOffset() / 60;
-
-          date = new Date(date.setHours(str));
-
-          if (typeof this.value === 'number') {
-            this.$emit('change', +date);
-          } else if (typeof this.value === 'object') {
-            this.$emit('change', date);
-          } else this.$emit('change', e);
-        }
+    handler(newValue) {
+      if (this.valid(newValue, this.type)) {
+        this.$emit('change', this.updataDate(newValue));
       } else {
         this.$emit('change', null);
       }
     },
+
     valid(val, valType) {
       let valTypes = {
         date: () => moment(val, 'YYYY-MM-DD', true).isValid(),
@@ -109,6 +76,43 @@ export default {
       };
 
       return valTypes[valType]();
+    },
+
+    updataDate(newValue) {
+      let date = null;
+      if (this.type === 'date') {
+        date = new Date(newValue);
+      }
+      if (this.type === 'time') {
+        let h = newValue.split(':')[0];
+        let m = newValue.split(':')[1];
+
+        date = new Date(this.value);
+
+        let timezoneOffset = date.getTimezoneOffset() / 60;
+
+        date = new Date(date.setHours(h - timezoneOffset, m));
+      }
+      if (this.type === 'datetime-local') {
+        date = new Date(newValue);
+        let timezoneOffset = date.getHours() - date.getTimezoneOffset() / 60;
+
+        date = new Date(date.setHours(timezoneOffset));
+      }
+
+      let typeOfValue = typeof this.value;
+
+      function toFormatDate() {
+        if (typeOfValue === 'number') {
+          return +date;
+        }
+        if (typeOfValue === 'object') {
+          return date;
+        }
+        return newValue;
+      }
+
+      return toFormatDate();
     },
   },
 };

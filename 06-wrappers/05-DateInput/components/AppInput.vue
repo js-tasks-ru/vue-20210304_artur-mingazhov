@@ -1,10 +1,24 @@
 <template>
   <div
     class="input-group"
-    :class="{ 'input-group_icon': !!$slots['left-icon'], 'input-group_icon-left': !!$slots['left-icon'] }"
+    :class="{
+      'input-group_icon': hasIcon.left || hasIcon.right,
+      'input-group_icon-left': hasIcon.left,
+      'input-group_icon-right': hasIcon.right,
+    }"
   >
     <slot name="left-icon"></slot>
-    <input class="form-control" :value="value" v-bind="$attrs" v-on="listeners" />
+    <component
+      :is="tag"
+      ref="input"
+      class="form-control"
+      :class="{ 'form-control_sm': small, 'form-control_rounded': rounded }"
+      v-bind="$attrs"
+      :value.prop="value"
+      v-on="listeners"
+    >
+    </component>
+    <slot name="right-icon"></slot>
   </div>
 </template>
 
@@ -18,15 +32,59 @@ export default {
   },
 
   props: {
-    value: String,
+    small: {
+      type: Boolean,
+      default: false,
+    },
+
+    rounded: {
+      type: Boolean,
+      default: false,
+    },
+
+    multiline: {
+      type: Boolean,
+      default: false,
+    },
+
+    value: {},
+  },
+
+  data() {
+    return {
+      hasIcon: {
+        left: false,
+        right: false,
+      },
+    };
   },
 
   computed: {
+    tag() {
+      return this.multiline ? 'textarea' : 'input';
+    },
+
     listeners() {
       return {
         ...this.$listeners,
         input: ($event) => this.$emit('input', $event.target.value),
+        change: ($event) => this.$emit('change', $event.target.value),
       };
+    },
+  },
+
+  mounted() {
+    this.updateHasIcon();
+  },
+
+  updated() {
+    this.updateHasIcon();
+  },
+
+  methods: {
+    updateHasIcon() {
+      this.hasIcon.left = !!this.$slots['left-icon'];
+      this.hasIcon.right = !!this.$slots['right-icon'];
     },
   },
 };
