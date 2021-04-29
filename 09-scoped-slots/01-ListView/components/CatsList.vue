@@ -1,23 +1,20 @@
 <template>
   <list-view :items="cats">
-    <!--
-    "X" - некоторый элемент списка, полученный из параметров слота.
-    Имя параметра выберите сами и замените X на него в коде ниже.
-
-    <list-view-card
-      :key="X.id"
-      tag="article"
-      :to="{ name: 'meetup', params: { meetupId: X.id } }"
-      :title="X.title"
-      :cover="X.cover"
-    >
-      <ul class="info-list">
-        <li>{{ X.description }}</li>
-        <li>Cute cat</li>
-        <li>Cats are always cute</li>
-      </ul>
-    </list-view-card>
-    -->
+    <template #default="{ item }">
+      <list-view-card
+        :key="item.id"
+        tag="article"
+        :to="{ name: 'meetup', params: { meetupId: item.id } }"
+        :title="item.title"
+        :cover="item.cover"
+      >
+        <ul class="info-list">
+          <li>{{ item.description }}</li>
+          <li>Cute cat</li>
+          <li>Cats are always cute</li>
+        </ul>
+      </list-view-card>
+    </template>
   </list-view>
 </template>
 
@@ -28,7 +25,7 @@ import ListViewCard from './ListViewCard';
 export default {
   name: 'CatsList',
 
-  components: { ListViewCard, ListView },
+  components: { ListView, ListViewCard },
 
   data() {
     return {
