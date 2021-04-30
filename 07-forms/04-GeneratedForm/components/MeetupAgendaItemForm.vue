@@ -29,8 +29,8 @@
       <component
         :is="item.component"
         v-bind="item.props"
-        :[item.model.prop]="$data.localAgendaItem[item.field]"
-        @[item.model.event]="$data.localAgendaItem[item.field] = $event"
+        :[item.model.prop]="localAgendaItem[item.field]"
+        @[item.model.event]="localAgendaItem[item.field] = $event"
       />
     </form-group>
   </div>
