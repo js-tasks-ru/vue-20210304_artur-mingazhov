@@ -3,23 +3,21 @@
     <div class="rangepicker__calendar">
       <div class="rangepicker__month-indicator">
         <div class="rangepicker__selector-controls">
-          <button class="rangepicker__selector-control-left"></button>
-          <div>Январь 2021</div>
-          <button class="rangepicker__selector-control-right"></button>
+          <button class="rangepicker__selector-control-left" @click="monthDown"></button>
+          <div>{{ currentDate }}</div>
+          <button class="rangepicker__selector-control-right" @click="monthUp"></button>
         </div>
       </div>
       <div class="rangepicker__date-grid">
-        <div class="rangepicker__cell rangepicker__cell_inactive">28</div>
-        <div class="rangepicker__cell rangepicker__cell_inactive">29</div>
-        <div class="rangepicker__cell rangepicker__cell_inactive">30</div>
-        <div class="rangepicker__cell rangepicker__cell_inactive">31</div>
-        <div class="rangepicker__cell">
-          1
-          <a class="rangepicker__event">Митап</a>
-          <a class="rangepicker__event">Митап</a>
+        <div
+          v-for="(date, i) in calendar"
+          :key="i"
+          class="rangepicker__cell"
+          :class="{ rangepicker__cell_inactive: date.isInactive }"
+        >
+          {{ date.day }}
+          <slot :date="date" />
         </div>
-        <div class="rangepicker__cell">2</div>
-        <div class="rangepicker__cell">3</div>
       </div>
     </div>
   </div>
@@ -28,6 +26,79 @@
 <script>
 export default {
   name: 'CalendarView',
+
+  data() {
+    return {
+      date: new Date(),
+    };
+  },
+
+  computed: {
+    currentDate() {
+      return this.date.toLocaleDateString(navigator.language, {
+        year: 'numeric',
+        month: 'long',
+      });
+    },
+
+    calendar() {
+      return [...this._daysBefore, ...this._daysIn, ...this._daysAfter];
+    },
+
+    _currentMonth() {
+      return this.date.getMonth();
+    },
+
+    _year() {
+      return this.date.getFullYear();
+    },
+
+    _daysIn() {
+      const start = 0;
+      const end = this._getLastDayOfMonth(this._year, this._currentMonth);
+
+      return this._initCalendar(start, end, this._currentMonth, false);
+    },
+
+    _daysBefore() {
+      const end = this._getLastDayOfMonth(this._year, this._currentMonth - 1);
+      const start = end - (new Date(this._year, this._currentMonth, 1).getDay() || 7) + 1;
+
+      return this._initCalendar(start, end, this._currentMonth - 1, true);
+    },
+
+    _daysAfter() {
+      const dayOfWeek = new Date(this._year, this._currentMonth + 1, 1).getDay();
+      const end = dayOfWeek == 0 ? 1 : dayOfWeek == 1 ? 0 : 8 - dayOfWeek;
+      const start = 0;
+
+      return this._initCalendar(start, end, this._currentMonth + 1, true);
+    },
+  },
+
+  methods: {
+    monthUp() {
+      this.date = new Date(this.date.setMonth(this._currentMonth + 1, 15));
+    },
+
+    monthDown() {
+      this.date = new Date(this.date.setMonth(this._currentMonth - 1, 15));
+    },
+
+    _getLastDayOfMonth(year, month) {
+      let date = new Date(year, month + 1, 0);
+      return date.getDate();
+    },
+
+    _initCalendar(start, end, month, isInactive) {
+      return Array.from(Array(end - start), (item, index) => ({
+        day: start + index + 1,
+        month: month < 0 ? 11 : month > 11 ? 0 : month,
+        year: month < 0 ? this._year - 1 : month > 11 ? this._year + 1 : this._year,
+        isInactive: isInactive,
+      }));
+    },
+  },
 };
 </script>
 
