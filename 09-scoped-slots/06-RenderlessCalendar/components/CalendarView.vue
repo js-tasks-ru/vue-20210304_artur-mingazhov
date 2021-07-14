@@ -1,25 +1,25 @@
 <template>
-  <renderless-calendar class="rangepicker">
-    <div class="rangepicker__calendar">
-      <div class="rangepicker__month-indicator">
-        <div class="rangepicker__selector-controls">
-          <button class="rangepicker__selector-control-left"></button>
-          <div>Январь 2021</div>
-          <button class="rangepicker__selector-control-right"></button>
+  <renderless-calendar v-slot="{ calendar, currentDate, monthDown, monthUp }" v-bind="$attrs">
+    <div class="rangepicker">
+      <div class="rangepicker__calendar">
+        <div class="rangepicker__month-indicator">
+          <div class="rangepicker__selector-controls">
+            <button class="rangepicker__selector-control-left" @click="monthDown"></button>
+            <div>{{ currentDate }}</div>
+            <button class="rangepicker__selector-control-right" @click="monthUp"></button>
+          </div>
         </div>
-      </div>
-      <div class="rangepicker__date-grid">
-        <div class="rangepicker__cell rangepicker__cell_inactive">28</div>
-        <div class="rangepicker__cell rangepicker__cell_inactive">29</div>
-        <div class="rangepicker__cell rangepicker__cell_inactive">30</div>
-        <div class="rangepicker__cell rangepicker__cell_inactive">31</div>
-        <div class="rangepicker__cell">
-          1
-          <a class="rangepicker__event">Митап</a>
-          <a class="rangepicker__event">Митап</a>
+        <div class="rangepicker__date-grid">
+          <div
+            v-for="(date, i) in calendar"
+            :key="i"
+            class="rangepicker__cell"
+            :class="{ rangepicker__cell_inactive: date.isInactive }"
+          >
+            {{ date.day }}
+            <slot :date="date" />
+          </div>
         </div>
-        <div class="rangepicker__cell">2</div>
-        <div class="rangepicker__cell">3</div>
       </div>
     </div>
   </renderless-calendar>
@@ -30,8 +30,8 @@ import RenderlessCalendar from './RenderlessCalendar';
 
 export default {
   name: 'CalendarView',
-
   components: { RenderlessCalendar },
+  inheritAttrs: false,
 };
 </script>
 
